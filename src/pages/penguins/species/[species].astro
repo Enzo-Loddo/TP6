@@ -1,0 +1,49 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PlotFigure from "../../../components/PlotFigure.astro";
+import penguins from "../../../assets/penguins.json";
+import * as Plot from "@observablehq/plot";
+
+export async function getStaticPaths() {
+  const allSpecies = [...new Set(penguins.map((p) => p.species))];
+  return allSpecies.map((species) => ({
+    params: { species: species },
+    props: { filteredPenguins: penguins.filter(p => p.species === species) },
+  }));
+}
+
+const { species } = Astro.params;
+const { filteredPenguins } = Astro.props;
+
+const plotOptions = {
+  grid: true,
+  marks: [
+    Plot.dot(filteredPenguins, {
+      x: "culmen_length_mm",
+      y: "culmen_depth_mm",
+      fill: "coral",
+      r: 4,
+      fillOpacity: 0.7,
+    }),
+  ],
+  x: { label: "Longueur du bec (mm)" },
+  y: { label: "Profondeur du bec (mm)" },
+  title: `Graphique des manchots ${species}`,
+};
+---
+<Layout>
+  <div class="max-w-5xl mx-auto py-8 px-4">
+    <div class="mb-8 border-b border-gray-200 pb-6">
+      <a href="/penguins/species" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour aux espèces
+      </a>
+      <h1 class="text-3xl font-extrabold text-gray-900">Espèce : {species}</h1>
+      <p class="text-gray-500 mt-2">{filteredPenguins.length} manchot(s) trouvé(s).</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 overflow-x-auto text-black">
+      <PlotFigure options={plotOptions} />
+    </div>
+  </div>
+</Layout>

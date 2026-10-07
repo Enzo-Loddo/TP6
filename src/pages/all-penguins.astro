@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlotFigure from "../components/PlotFigure.astro";
+import penguins from "../assets/penguins.json";
+import * as Plot from "@observablehq/plot";
+
+// Déterminer automatiquement la liste des espèces
+const speciesList = [...new Set(penguins.map((p) => p.species))].sort();
+---
+<Layout>
+  <div class="max-w-5xl mx-auto py-8 px-4">
+    <div class="mb-8 border-b border-gray-200 pb-6">
+      <a href="/" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-4 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour à l'accueil
+      </a>
+      <h1 class="text-3xl font-extrabold text-gray-900">Tous les Manchots (Boucle)</h1>
+    </div>
+
+    <div class="space-y-12">
+      {speciesList.map((species) => {
+        const filteredPenguins = penguins.filter(p => p.species === species);
+        return (
+          <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 text-black">
+            <h2 class="text-2xl font-bold mb-4">Espèce : {species}</h2>
+            <PlotFigure
+              options={{
+                grid: true,
+                marks: [
+                  Plot.dot(filteredPenguins, {
+                    x: "culmen_length_mm",
+                    y: "culmen_depth_mm",
+                    fill: "steelblue",
+                    r: 4,
+                    fillOpacity: 0.7,
+                  }),
+                ],
+                x: { label: "Longueur du bec (mm)" },
+                y: { label: "Profondeur du bec (mm)" },
+              }}
+            />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</Layout>

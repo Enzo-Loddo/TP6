@@ -1,21 +1,26 @@
 ---
-import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
-import * as Plot from "@observablehq/plot";
-import penguins from "../assets/penguins.json";
 ---
-
 <Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  <PlotFigure
-    options={{
-      marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],
-    }}
-  />
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-4">
+        Menu Principal du TP
+      </h1>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+      <a href="/all-penguins" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">1. Tous les Manchots (Boucle map)</h2>
+      </a>
+
+      <a href="/cars/year" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">2. Voitures par année (getStaticPaths)</h2>
+      </a>
+
+      <a href="/penguins/species" class="group block p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">3. Manchots par espèce (getStaticPaths)</h2>
+      </a>
+    </div>
+  </div>
 </Layout>
